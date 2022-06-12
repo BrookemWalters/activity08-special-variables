@@ -26,6 +26,9 @@ Therefore, you will need to use either `read_delim` with a `delim = ...` argumen
 Assign the file to a meaningful object name, be sure to avoid printing any unnecessary information, and give the code chunk a meaningful name.
 
 
+```{r read_text}
+hitz <-  read_tsv(here::here("data", "billboard_songs.txt"))
+```
 
 
 These data include information on song popularity.
@@ -59,6 +62,37 @@ dataset %>%
 ```
 
 ## Analysis
+
+```{r totals}
+
+hitz %>% 
+  count(`weeks on chart` )
+```
+```{r ggpoint}
+
+
+ggplot(hitz, aes(x= artist, y = `weeks on chart`)) +
+  geom_point()
+```
+```{r most_hits_by_artist}
+hitz %>% 
+  group_by(artist) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  slice(1:10) %>% 
+  ggplot() +
+   geom_point(mapping = aes(x = n, y = artist))
+
+```
+
+```{r longest_title}
+hitz %>% 
+  arrange(desc(`weeks on chart`)) %>% 
+  slice(1:5) %>% 
+  ggplot(mapping = aes(y = artist, x = `weeks on chart`, fill = `weeks on chart`)) +
+   geom_bar(stat = "identity")
+```
+
 
 You are encouraged to explore these data as you wish using functions from the packages for the three special variable types.
 Some ideas that you might be interested in:
